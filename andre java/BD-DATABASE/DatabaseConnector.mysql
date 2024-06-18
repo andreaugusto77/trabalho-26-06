@@ -1,0 +1,34 @@
+import java.sql.*;
+
+public class DatabaseConnector {
+    // URL de conexão com o banco de dados MySQL
+    private static final String URL = "jdbc:mysql://localhost:3306/ApartmentDB";
+    // Nome de usuário do banco de dados
+    private static final String USER = "root";
+    // Senha do banco de dados
+    private static final String PASSWORD = "";
+
+    // Método para obter os detalhes da planta do apartamento
+    public static String getApartmentPlan() {
+        String planDetails = ""; // Variável para armazenar os detalhes da planta
+
+        // Tente estabelecer uma conexão com o banco de dados
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+             // Crie uma declaração (statement) para executar a consulta SQL
+             Statement stmt = conn.createStatement();
+             // Execute a consulta SQL para obter os detalhes da planta onde o nome é '50m2'
+             ResultSet rs = stmt.executeQuery("SELECT details FROM ApartmentPlans WHERE name = '50m2'")) {
+
+            // Se houver um resultado, pegue os detalhes da planta
+            if (rs.next()) {
+                planDetails = rs.getString("details");
+            }
+        } catch (SQLException e) {
+            // Imprime a pilha de erros se ocorrer uma exceção SQL
+            e.printStackTrace();
+        }
+
+        // Retorne os detalhes da planta
+        return planDetails;
+    }
+}
